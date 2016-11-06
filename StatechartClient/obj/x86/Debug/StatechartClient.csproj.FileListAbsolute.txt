@@ -1,7 +1,0 @@
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\bin\Debug\StatechartClient.exe
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\bin\Debug\StatechartClient.pdb
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\bin\Debug\Statechart.dll
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\bin\Debug\Statechart.pdb
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\obj\x86\Debug\StatechartClient.exe
-C:\Users\rboorgapally\Documents\Visual Studio 2010\Projects\StatechartClient\StatechartClient\obj\x86\Debug\StatechartClient.pdb
