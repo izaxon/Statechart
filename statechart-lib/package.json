@@ -1,0 +1,30 @@
+{
+  "name": "statechart-lib",
+  "version": "1.0.0",
+  "description": "A TypeScript library for state chart management.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.0.0",
+    "jest": "^26.0.0",
+    "@types/jest": "^26.0.0",
+    "ts-jest": "^26.0.0",
+    "@types/node": "^14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/izaxon/statechart"
+  },
+  "keywords": [
+    "state",
+    "chart",
+    "library",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
