@@ -17,26 +17,20 @@ npm install statechart-lib
 Here’s a quick example of how to use the State Chart Library:
 
 ```typescript
-import { StateMachine, State, Transition } from 'statechart-lib';
+import { State, Transition } from 'statechart-lib';
 
 // Define states
 const idleState = new State('idle', () => console.log('Entering idle state'));
 const activeState = new State('active', () => console.log('Entering active state'));
 
 // Define transitions
-const transitionToActive = new Transition(idleState, activeState, 'start');
+const transitionToActive = new Transition(activeState, () => true, () => console.log('Transitioning to active state'));
 
-// Create state machine
-const stateMachine = new StateMachine();
-stateMachine.addState(idleState);
-stateMachine.addState(activeState);
-stateMachine.addTransition(transitionToActive);
+// Set initial state
+idleState.current = activeState;
 
-// Start in idle state
-stateMachine.transitionTo('idle');
-
-// Trigger transition
-stateMachine.transitionTo('active');
+// Run state machine
+idleState.run();
 ```
 
 ## API
@@ -44,13 +38,67 @@ stateMachine.transitionTo('active');
 ### Classes
 
 - **State**: Represents a state in the state machine.
+  - **Properties**:
+    - `name`: The name of the state.
+    - `entering`: A function to be called when entering the state.
+    - `within`: A function to be called while within the state.
+    - `exiting`: A function to be called when exiting the state.
+    - `current`: The current state.
+    - `states`: An array of sub-states.
+    - `transitions`: An array of transitions.
+  - **Methods**:
+    - `run()`: Executes the state machine logic.
+
 - **Transition**: Defines a transition between states.
-- **StateMachine**: Manages states and transitions.
+  - **Properties**:
+    - `to`: The target state.
+    - `condition`: A function that returns a boolean indicating whether the transition should occur.
+    - `action`: A function to be called when the transition occurs.
 
 ### Interfaces
 
 - **StateConfig**: Defines the structure for state configurations.
+  - **Properties**:
+    - `name`: The name of the state.
+    - `entering`: A function to be called when entering the state.
+    - `within`: A function to be called while within the state.
+    - `exiting`: A function to be called when exiting the state.
+    - `transitions`: An array of transition configurations.
+
 - **TransitionConfig**: Defines the structure for transition configurations.
+  - **Properties**:
+    - `to`: The target state.
+    - `condition`: A function that returns a boolean indicating whether the transition should occur.
+    - `action`: A function to be called when the transition occurs.
+
+## Advanced Usage
+
+### Nested States
+
+You can define nested states by adding sub-states to a state:
+
+```typescript
+const subState = new State('subState', () => console.log('Entering subState'));
+idleState.states.push(subState);
+```
+
+### Conditional Transitions
+
+Transitions can have conditions that must be met for the transition to occur:
+
+```typescript
+const conditionalTransition = new Transition(activeState, () => someCondition, () => console.log('Transitioning based on condition'));
+idleState.transitions.push(conditionalTransition);
+```
+
+### Actions on Transitions
+
+You can define actions to be executed when a transition occurs:
+
+```typescript
+const actionTransition = new Transition(activeState, () => true, () => console.log('Action on transition'));
+idleState.transitions.push(actionTransition);
+```
 
 ## Running Tests
 
