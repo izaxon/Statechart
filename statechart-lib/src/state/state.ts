@@ -4,6 +4,7 @@ export class State {
   readonly states: State[] = [];
   readonly transitions: Transition[] = [];
   current: State | null = null;
+  public isActive: boolean = false;
 
   constructor(
     public readonly name: string,
@@ -39,6 +40,25 @@ export class State {
         }
       }
       this.current.run();
+    }
+  }
+
+  public trigger(event: string): void {
+    for (const t of this.transitions) {
+      if (t.event === event && (!t.condition || t.condition())) {
+        if (this.exiting) {
+          this.exiting();
+        }
+        if (t.action) {
+          t.action();
+        }
+        this.isActive = false;
+        t.to.isActive = true;
+        if (t.to.entering) {
+          t.to.entering();
+        }
+        break;
+      }
     }
   }
 }
