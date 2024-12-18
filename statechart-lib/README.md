@@ -17,7 +17,7 @@ npm install statechart-lib
 Here’s a quick example of how to use the State Chart Library:
 
 ```typescript
-import { State, Transition } from 'statechart-lib';
+import { State, Transition, StateMachine } from 'statechart-lib';
 
 // Define states
 const idleState = new State('idle', () => console.log('Entering idle state'));
@@ -26,11 +26,14 @@ const activeState = new State('active', () => console.log('Entering active state
 // Define transitions
 const transitionToActive = new Transition(activeState, () => true, () => console.log('Transitioning to active state'));
 
-// Set initial state
-idleState.current = activeState;
+// Create state machine
+const stateMachine = new StateMachine();
+stateMachine.addState(idleState);
+stateMachine.addState(activeState);
+stateMachine.addTransition({ from: 'idle', to: 'active', event: 'activate' });
 
-// Run state machine
-idleState.run();
+// Transition to active state
+stateMachine.transitionTo('active');
 ```
 
 ## API
@@ -54,6 +57,15 @@ idleState.run();
     - `to`: The target state.
     - `condition`: A function that returns a boolean indicating whether the transition should occur.
     - `action`: A function to be called when the transition occurs.
+
+- **StateMachine**: Manages the state machine.
+  - **Properties**:
+    - `states`: A map of state names to state instances.
+    - `transitions`: An array of transitions.
+  - **Methods**:
+    - `addState(state: any)`: Adds a state to the state machine.
+    - `addTransition(transition: { from: string; to: string; event: string })`: Adds a transition to the state machine.
+    - `transitionTo(stateName: string)`: Transitions to the specified state.
 
 ### Interfaces
 
