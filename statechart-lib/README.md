@@ -120,6 +120,15 @@ To run the tests for the State Chart Library, use the following command:
 npm test
 ```
 
+## Building the Library
+1. Run `npm run test` to run the tests.
+2. Update the version number in the `package.json` file.
+3. Commit and push the changes to the repository.
+4. Run `git tag -a v1.0.x -m "Version 1.0.x"` to tag the release.
+5. Run `git push origin v1.0.x` to push the tag to the repository.
+
+The package will be automatically published to npm using GitHub Actions.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
