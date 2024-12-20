@@ -17,23 +17,35 @@ npm install statechart-lib
 Here’s a quick example of how to use the State Chart Library:
 
 ```typescript
-import { State, Transition, StateMachine } from 'statechart-lib';
+import State from './state';
+import Transition from './transition';
+import StateMachine from './machine';
 
 // Define states
-const idleState = new State('idle', () => console.log('Entering idle state'));
-const activeState = new State('active', () => console.log('Entering active state'));
+const idleState = new State({
+  entering: () => console.log('Entering idle state')
+});
+const activeState = new State({
+  entering: () => console.log('Entering active state')
+});
 
 // Define transitions
-const transitionToActive = new Transition(activeState, () => true, () => console.log('Transitioning to active state'));
+const transitionToActive = new Transition(activeState, {
+  condition: () => true,
+  action: () => console.log('Transitioning to active state')
+});
 
 // Create state machine
-const stateMachine = new StateMachine();
-stateMachine.addState(idleState);
-stateMachine.addState(activeState);
-stateMachine.addTransition({ from: 'idle', to: 'active', event: 'activate' });
+const stateMachine = new StateMachine([idleState, activeState]);
 
-// Transition to active state
-stateMachine.transitionTo('active');
+// Add transition to idle state
+idleState.addTransition(activeState, {
+  condition: () => true,
+  action: () => console.log('Transitioning to active state')
+});
+
+// Update state machine
+stateMachine.update();
 ```
 
 ## API
@@ -42,7 +54,6 @@ stateMachine.transitionTo('active');
 
 - **State**: Represents a state in the state machine.
   - **Properties**:
-    - `name`: The name of the state.
     - `entering`: A function to be called when entering the state.
     - `within`: A function to be called while within the state.
     - `exiting`: A function to be called when exiting the state.
@@ -50,6 +61,7 @@ stateMachine.transitionTo('active');
     - `states`: An array of sub-states.
     - `transitions`: An array of transitions.
   - **Methods**:
+    - `addTransition(state: State, options: TransitionOptions)`: Adds a transition to the state.
     - `run()`: Executes the state machine logic.
 
 - **Transition**: Defines a transition between states.
@@ -60,28 +72,10 @@ stateMachine.transitionTo('active');
 
 - **StateMachine**: Manages the state machine.
   - **Properties**:
-    - `states`: A map of state names to state instances.
-    - `transitions`: An array of transitions.
+    - `states`: An array of states.
+    - `current`: The current state.
   - **Methods**:
-    - `addState(state: any)`: Adds a state to the state machine.
-    - `addTransition(transition: { from: string; to: string; event: string })`: Adds a transition to the state machine.
-    - `transitionTo(stateName: string)`: Transitions to the specified state.
-
-### Interfaces
-
-- **StateConfig**: Defines the structure for state configurations.
-  - **Properties**:
-    - `name`: The name of the state.
-    - `entering`: A function to be called when entering the state.
-    - `within`: A function to be called while within the state.
-    - `exiting`: A function to be called when exiting the state.
-    - `transitions`: An array of transition configurations.
-
-- **TransitionConfig**: Defines the structure for transition configurations.
-  - **Properties**:
-    - `to`: The target state.
-    - `condition`: A function that returns a boolean indicating whether the transition should occur.
-    - `action`: A function to be called when the transition occurs.
+    - `update()`: Updates the state machine by running the current state's logic.
 
 ## Advanced Usage
 
@@ -90,7 +84,9 @@ stateMachine.transitionTo('active');
 You can define nested states by adding sub-states to a state:
 
 ```typescript
-const subState = new State('subState', () => console.log('Entering subState'));
+const subState = new State({
+  entering: () => console.log('Entering subState')
+});
 idleState.states.push(subState);
 ```
 
@@ -99,8 +95,14 @@ idleState.states.push(subState);
 Transitions can have conditions that must be met for the transition to occur:
 
 ```typescript
-const conditionalTransition = new Transition(activeState, () => someCondition, () => console.log('Transitioning based on condition'));
-idleState.transitions.push(conditionalTransition);
+const conditionalTransition = new Transition(activeState, {
+  condition: () => someCondition,
+  action: () => console.log('Transitioning based on condition')
+});
+idleState.addTransition(activeState, {
+  condition: () => someCondition,
+  action: () => console.log('Transitioning based on condition')
+});
 ```
 
 ### Actions on Transitions
@@ -108,8 +110,14 @@ idleState.transitions.push(conditionalTransition);
 You can define actions to be executed when a transition occurs:
 
 ```typescript
-const actionTransition = new Transition(activeState, () => true, () => console.log('Action on transition'));
-idleState.transitions.push(actionTransition);
+const actionTransition = new Transition(activeState, {
+  condition: () => true,
+  action: () => console.log('Action on transition')
+});
+idleState.addTransition(activeState, {
+  condition: () => true,
+  action: () => console.log('Action on transition')
+});
 ```
 
 ## Running Tests
